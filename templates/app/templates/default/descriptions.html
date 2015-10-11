@@ -1,0 +1,180 @@
+<div class="container">
+  <div class="row mt centered">
+    <div class="col-lg-6 col-lg-offset-3">
+      <h1>Born with one porpuse, <br> help to develop AngularJS Apps, fast as a bite</h1>
+
+    </div>
+  </div><!-- /row -->
+
+  <div class="row mt centered">
+    <div class="col-lg-4">
+      <!-- <img src="assets/img/ser01.png" width="120" alt=""> -->
+      <h4>JavaScript Closures</h4>
+      <p>An IIFE removes variables from the global scope. This helps prevent variables and function declarations from living longer than expected in the global scope, which also helps avoid variable collisions.</p>
+    </div><!--/col-lg-4 -->
+
+    <div class="col-lg-4">
+      <h4>Avoid Naming Collisions</h4>
+      <p>With 1 component per file, there is rarely a need to introduce a variable for the module.</p>
+
+    </div><!--/col-lg-4 -->
+
+    <div class="col-lg-4">
+      <h4>Named vs Anonymous Functions</h4>
+      <p>This produces more readable code, is much easier to debug, and reduces the amount of nested callback code.</p>
+
+    </div><!--/col-lg-4 -->
+  </div><!-- /row -->
+
+  <div class="row mt centered">
+    <div class="col-lg-4">
+      <h4>controllerAs View Syntax</h4>
+      <p> It promotes the use of binding to a "dotted" object in the View (e.g. customer.name instead of name), which is more contextual, easier to read, and avoids any reference issues that may occur without "dotting".</p>
+    </div><!--/col-lg-4 -->
+
+    <div class="col-lg-4">
+      <h4>controllerAs with vm</h4>
+      <p>he this keyword is contextual and when used within a function inside a controller may change its context. Capturing the context of this avoids encountering this problem.</p>
+
+    </div><!--/col-lg-4 -->
+
+    <div class="col-lg-4">
+      <h4>Bindable Members Up Top</h4>
+      <p>Placing bindable members at the top makes it easy to read and helps you instantly identify which members of the controller can be bound and used in the View.</p>
+
+    </div><!--/col-lg-4 -->
+  </div><!-- /row -->
+
+</div><!-- /container -->
+
+
+<div class="container">
+
+  <h3><a id="Rapid_Web_Development_With_AngularJS_4"></a>Rapid Web Development With AngularJS.</h3>
+  <p>The main goal of Mamba is help to develop AngularJS Apps, as fast as you can, in this way, i propose an structure for build Angular Apps, based on a few documents that i read on the net, the most important ducument is one about best design practices, maintainable and scable code from <a href="https://github.com/johnpapa/angular-styleguide#directives">John Papa - Angular Style Guide</a>, is on this guide where resides the main concepts for build greats and clean code for your apps.</p>
+  <p>The pattern design used in mamba is domain pattern.</p>
+  <p>Mamba has built with several tools and concepts for help to create a fast way to create apps</p>
+  <ul>
+  <li>Autogenerate code (controllers, directives, providers, etc)</li>
+  <li>Modularity, manage app modules from Git repositories, when you install a module the menu of this module automatically inject into the main app.</li>
+  <li>Templates, Mamba has come with a simple provider that can manage several themes</li>
+  </ul>
+  <h3><a id="The_declaration_of_principles_15"></a>The declaration of principles</h3>
+  <ul>
+  <li>Clean Code</li>
+  <li>Single Responsability</li>
+  <li>Angular Components as Inmmediatelly Invoked Function Expression</li>
+  <li>Avoid Naming Collitions</li>
+  <li>Controller As Syntax</li>
+  <li>Bindable Members of components</li>
+  <li>Work with promises</li>
+  <li>Exception Catchers</li>
+  <li>Folders-by-Type Structure</li>
+  <li>Startup Logic</li>
+  </ul>
+  <h3><a id="Setting_your_environment_27"></a>Setting your environment</h3>
+  <p>Add to your .bashrc file:</p>
+  <pre><code><span class="hljs-keyword">alias</span> <span class="hljs-title">mamba</span>=/path/<span class="hljs-keyword">to</span>/mamba/cloned/repo
+  </code></pre>
+  <p>This file is in ~/.bashrc (home directory)</p>
+  <p>To expose all scripts in the shell directory add mamba path to your system path</p>
+  <pre><code>export <span class="hljs-built_in">PATH</span>=/<span class="hljs-built_in">path</span>/to/mamba/cloned/repo:$<span class="hljs-built_in">PATH</span>
+  </code></pre>
+  <h3><a id="Creating_a_new_AngularJS_project_39"></a>Creating a new AngularJS project</h3>
+  <pre><code>mamba <span class="hljs-keyword">new</span>
+  </code></pre>
+  <p>This command will create a complete main tree for develop an AngularJS App, in the modules folder resides the entire logic of your app.
+  Heres is the directory tree:</p>
+  <ul>
+  <li>app
+  <ul>
+  <li>controller</li>
+  <li>directive</li>
+  <li>factory</li>
+  <li>modules</li>
+  <li>providers</li>
+  <li>routes</li>
+  <li>templates</li>
+  </ul>
+  </li>
+  <li>assets</li>
+  </ul>
+  <h3><a id="Creating_a_new_Controller_57"></a>Creating a new Controller</h3>
+  <pre><code>mamba generate controller -n newController -<span class="hljs-keyword">D</span>
+  </code></pre>
+  <p>This will generate a new blank controller if you add the -D option the controller will be created with the default actions (CRUD)</p>
+  <h3><a id="Installing_modules_65"></a>Installing modules</h3>
+  <p>Mamba can install modules from remote Git repositories, you must configure the dependencies.json file:</p>
+  <p>The module must have the same directory tree listed above, cause mamba gets a module as micro app (Domain Design Pattern)</p>
+  <pre><code>{
+    "<span class="hljs-attribute">modules</span>":<span class="hljs-value">[
+      {
+        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Demo"</span></span>,
+        "<span class="hljs-attribute">repository</span>": <span class="hljs-value"><span class="hljs-string">"ssh://git@li.homeip.net:2222/cadrogui/mamba-modulo.git"</span></span>,
+        "<span class="hljs-attribute">branch</span>": <span class="hljs-value"><span class="hljs-string">"master"</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"module"</span>
+      </span>}
+    ]
+  </span>}
+  </code></pre>
+  <p>for install the modules listed in your dependencies.json file, just type:</p>
+  <pre><code>mamba <span class="hljs-keyword">install</span> -m
+  </code></pre>
+  <h3><a id="Url_Interpolator_88"></a>Url Interpolator</h3>
+  <p>Mamba has built in with an url interpolator for develop a clean and easy to read code, you can read the gist <a href="https://gist.github.com/cadrogui/286669e5fb17faeae0fb">here</a>.</p>
+  <p>For use the Interpolator you must provide an array with an object and the object properties are the interpolated labels.</p>
+  <p>If you want use the interpolator, you must add the label to your url in the factory method like this:</p>
+  <pre><code><span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">url</span>:<span class="hljs-value"> APP_CONSTANTS.URL + <span class="hljs-string">"posts/:post_id/user/:user_id"</span> </span></span></span>}
+  </code></pre>
+  <pre><code><span class="hljs-keyword">var</span> obj = [<span class="hljs-comment">{ post_id: 12, user_id: 66 }</span>]
+
+  AppFactory.getPostsByUser(obj).<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(promise)</span><span class="hljs-comment">{
+      console.log(promise)
+  }</span>);</span>
+  </code></pre>
+  <h3><a id="Cache_108"></a>Cache</h3>
+  <p>Mamba has built in with a cache factory for cached your request and save bandwidth and give more speed to your app.</p>
+  <p>For use the factory you must inject the ‘CachedData’ on your controller.</p>
+  <p>Add data to cache:</p>
+  <pre><code>CachedData.<span class="hljs-function"><span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-string">'key'</span>, values)</span></span>
+  </code></pre>
+  <p>Read data fom cache:</p>
+  <pre><code>CachedData.<span class="hljs-function"><span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-string">'key'</span>)</span></span>
+  </code></pre>
+  <p>Remove data from cache:</p>
+  <pre><code>CachedData.<span class="hljs-function"><span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-string">'key'</span>)</span></span>
+  </code></pre>
+  <p>Clear entire cache:</p>
+  <pre><code>CachedData.removeAll<span class="hljs-comment">()</span>;
+  </code></pre>
+  <h3><a id="Auth_Service_130"></a>Auth Service</h3>
+  <p>Mamba came with a complete auth service to handle you auth process, the methods are:</p>
+  <ul>
+  <li>login</li>
+  <li>logout</li>
+  <li>_csrfToken</li>
+  <li>_setCsrfToken</li>
+  <li>_getCsrfToken</li>
+  <li>setCurrentUser</li>
+  <li>getCurrentUser</li>
+  <li>destroyUser</li>
+  <li>isAuthenticated</li>
+  </ul>
+  <h3><a id="Restrict_Acces_to_a_UIRouter_State_144"></a>Restrict Acces to a UI-Router State</h3>
+  <p>For handle restricted areas in your app, you must add this to the desired state</p>
+  <pre><code><span class="hljs-tag">data</span>: <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">requireLogin</span>:<span class="hljs-value"> true </span></span></span>},
+  </code></pre>
+  <p>The app on the event $stateChangeStart, will verify if the state has the requiredLogin flag to true, if is true the app will verify if the AuthService.isAuthenticated() method return true if both conditions are true you must restricted area if AuthService.isAuthenticated() method is false will redirect to login state.</p>
+  <h3><a id="Login_Controller_152"></a>Login Controller</h3>
+  <h3><a id="HTTP_Interceptor_154"></a>HTTP Interceptor</h3>
+  <p>Mamba suggest to handle the request by http status code, in this way you can set some generic resposnses string for those status code.</p>
+  <h3><a id="Menu_Provider_158"></a>Menu Provider</h3>
+  <p>Mambas has built with a menu provider for handle dinamically the menu item injection in the template, you must add the items in the route.js file:</p>
+  <pre><code>  <span class="hljs-tag">MenuProvider</span><span class="hljs-class">.add</span>({
+      <span class="hljs-attribute">url</span>: <span class="hljs-string">'Github'</span>,
+      <span class="hljs-attribute">title</span>: <span class="hljs-string">'Forkme on Github!'</span>
+    });
+  </code></pre>
+  <h3><a id="Template_Provider_168"></a>Template Provider</h3>
+  <h3><a id="Building_templates_169"></a>Building templates</h3>
+</div>

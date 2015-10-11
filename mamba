@@ -1,0 +1,125 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+    Mamba = require('./lib'),
+    mamba = new Mamba(),
+    fs = require('fs'),
+    path = require('path');
+
+program
+  .command('test')
+  .action(function(){
+    // var cache = {'/etc':'/private/etc'};
+
+    // fs.realpath(process.cwd(), '/app/modules', function (err, resolvedPath) {
+    //   if (err) throw err;
+    //   console.log(resolvedPath);
+    // });
+
+    // console.log('modulos', path.resolve(process.cwd(),'modules'));
+    // console.log('controladores', path.resolve(process.cwd(),'controller'));
+
+    // console.log(path.relative(process.cwd(), 'app/modules/Demo'));
+
+    // console.log(fs.readFileSync(path.join(process.cwd(), '../templates') + '/my-template.html', 'utf8'));
+
+    scope = {
+      projectPath: process.cwd(),
+      rootPath: __dirname,
+      AppModules: process.cwd() + '/modules/', /* revisar */
+      templates: __dirname + '/templates/',
+      jst: __dirname + '/templates/jst/',
+      assets: '/assets/',
+    }
+
+    // funcrion para refistrar componentes dentro de un modulo
+
+    // crear un asistente para definir variables globales como el APP NAME en un json file
+
+    function opp(){
+      if(process.cwd().indexOf('modules') != -1){
+        return 'estoy en modules' + path.resolve(path.dirname(process.cwd()), '..', '..')
+      }else{
+        return 'estoy fuera de modules' + process.cwd();
+      }
+    }
+    console.log(opp());
+
+    // console.log(scope);
+  })
+
+program
+  .command('install [install]')
+  .alias('-i')
+  .description('Install modules from a git repository')
+  .option('-a, --assets [assets]', 'Install Assets')
+  .option('-m, --modules [modules]', 'Install Modules')
+  .action(function(cmd, options){
+    if(options.assets){
+      mamba.installAssets();
+    }else if(options.modules){
+      mamba.installModules();
+    }
+  })
+
+program
+  .command('new [new]')
+  .description('Generate a new AngularJS App aka ngApp')
+  .action(function(){
+    mamba.newProject()
+  })
+
+program
+  .command('generate [env]')
+  .description('Create AngularJS components <module, controller, factory, directive, service, route> ')
+  .option("-m, --module [module]", "Angular module name")
+  .option("-n, --name [name]", "Component name")
+  .option("-a, --actions [actions]", "Comma sparated list of method to be generated")
+  .option("-D, --crud [crud]", "Generate with default crud actions ")
+  .option("-I, --interpolate [interpolate]", "Generate a factory with interpolated labels ")
+  .action(function(env, options){
+
+    var module = options.module
+    var name = options.name
+    var crud = ['create','list','update','delete']
+
+    if(options.crud){
+      var methods = crud
+    }else{
+      var methods = options.actions.split(',')
+    }
+
+    switch(env){
+      case 'controller':
+        console.log('creating controller', env);
+        mamba.compile({module: module, name: name, methods: methods, type: 'controller'})
+      break;
+
+      case 'factory':
+        if(options.interpolate){
+          console.log('creating interpolated factory', env);
+          mamba.compile({module: module, name: name, methods: methods, type: 'factory', interpolated: true})
+        }else{
+          console.log('creating factory', env);
+          mamba.compile({module: module, name: name, methods: methods, type: 'factory'})
+        }
+      break;
+
+      case 'directive':
+        console.log('creating directive not implemented yet');
+      break;
+
+      case 'service':
+        console.log('creating servicenot implemented yet');
+      break;
+
+      case 'route':
+        console.log('creating routenot implemented yet');
+      break;
+    }
+
+  });
+
+program.parse(process.argv);
+
+if (!program.args.length) program.help();

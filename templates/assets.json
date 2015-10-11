@@ -1,0 +1,40 @@
+{
+  "assets":[
+    {
+      "name": "angular",
+      "repository": "https://github.com/angular/bower-angular.git",
+      "branch": "master",
+      "type": "asset"
+    },
+    {
+      "name": "angular-resource",
+      "repository": "https://github.com/angular/bower-angular-resource.git",
+      "branch": "master",
+      "type": "asset"
+    },
+    {
+      "name": "angular-ui-route",
+      "repository": "https://github.com/angular-ui/ui-router.git",
+      "branch": "master",
+      "type": "asset"
+    },
+    {
+      "name": "angular-sanitize",
+      "repository": "https://github.com/angular/bower-angular-sanitize.git",
+      "branch": "master",
+      "type": "asset"
+    },
+    {
+      "name": "ocLazyLoad",
+      "repository": "https://github.com/ocombe/ocLazyLoad.git",
+      "branch": "master",
+      "type": "asset"
+    },
+    {
+      "name": "angular-notify",
+      "repository": "https://github.com/cgross/angular-notify.git",
+      "branch": "master",
+      "type": "asset"
+    }
+  ]
+}

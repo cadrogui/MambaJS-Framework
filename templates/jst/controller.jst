@@ -1,0 +1,41 @@
+/**
+ * MambaJSFramework
+ *
+ * @description :: AngularJS controller as Immediatelly Invoked Function Expression (IIFE)
+ *                 An IIFE removes variables from the global scope. This helps prevent variables
+ *                 and function declarations from living longer than expected in the global scope,
+ *                 which also helps avoid variable collisions
+ * @help        :: See http://
+ *
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('<%= module %>')
+        .controller('<%= name %>', <%= name %>);
+
+    <%= name %>.$inject = ['Menu', '$timeout']
+
+    function <%= name %>(Menu, $timeout) {
+
+    /*
+      Bindable Members Up Top
+      Placing bindable members at the top makes it easy to read and helps you instantly identify which
+      members of the controller can be bound and used in the View
+    */
+
+      var vd = this
+      <% methods.forEach(function(name) { %>vd.<%- name %> = <%- name %>
+      <% }); %>
+
+      <% methods.forEach(function(name) { %>
+      function <%- name %>(){
+        // ...
+      }
+      <% }); %>
+
+  }
+
+})();

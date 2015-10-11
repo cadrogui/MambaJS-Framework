@@ -1,0 +1,10 @@
+{
+  "modules":[
+    {
+      "name": "Demo",
+      "repository": "ssh://git@li.homeip.net:2222/cadrogui/mamba-modulo.git",
+      "branch": "master",
+      "type": "module"
+    }
+  ]
+}

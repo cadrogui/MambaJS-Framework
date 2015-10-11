@@ -1,0 +1,21 @@
+{
+  "name": "MambaFramework",
+  "version": "1.0.0",
+  "description": "MambaFramework is a web framework to make a rapid development of web front ends based on AngularJS",
+  "main": "index.html",
+  "keywords": [
+    "AngularJS",
+    "Front-End",
+    "Web"
+  ],
+  "author": "Misfits",
+  "dependencies": {
+    "async": "^1.4.2",
+    "bluebird": "^2.9.30",
+    "cheerio": "^0.19.0",
+    "child-process-promise": "^1.1.0",
+    "commander": "^2.8.1",
+    "lodash": "^3.9.3",
+    "walk": "^2.3.9"
+  }
+}

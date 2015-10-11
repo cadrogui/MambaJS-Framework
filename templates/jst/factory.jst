@@ -1,0 +1,65 @@
+/**
+ * MambaJSFramework
+ *
+ * @description :: Factories should have a single responsibility, that is encapsulated by its context.
+ *                 Once a factory begins to exceed that singular purpose, a new factory should be created.
+ *                 Factories are singletons and return an object that contains the members of the service.
+ * @help        :: See http://
+ *
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('<%= module %>')
+        .factory('<%= name %>', <%= name %>);
+
+    <%= name %>.$inject = ['$http', '$q', 'APP_CONSTANTS', 'interpolateUrl'];
+
+    function <%= name %>($http, $q, APP_CONSTANTS, interpolateUrl) {
+
+      /*
+        - Placing accessible members at the top makes it easy to read and helps you instantly identify which
+        functions of the factory you can access externally.
+        - Placing the implementation details of a function later in the file moves that complexity out of view
+        so you can see the important stuff up top.
+        - Order is critical with function expressions
+      */
+
+      var service = {
+        <% methods.forEach(function(name) { %> <%- name %>: <%- name %>
+        <% }); %>
+      }
+
+      return service
+
+      <% methods.forEach(function(name) { %>
+
+      /*
+        <%- name %>
+      */
+
+      function <%- name %>(obj){
+        var deferred = $q.defer();
+        var urls = [
+                    { url: APP_CONSTANTS.URL + "<%- name %>" }
+                   ];
+        var promises = [];
+
+        urls.forEach(function(url){
+          promises.push($http({ method: "GET", url: url.url, params: obj }))
+        });
+
+        $q.all(promises).then(function(data){
+          deferred.resolve({
+            "<%- name %>": data
+          })
+        })
+
+        return deferred.promise;
+      }
+      <% }); %>
+  }
+
+})();
