@@ -1,8 +1,5 @@
 /**
  * MambaJSFramework Core Methods
- *
- * @description ::
- * @help        :: See http://
  */
 
 var fs = require('fs');
@@ -18,24 +15,13 @@ var fs = require('fs');
 var async = require('async');
 
 var Mamba = function(obj){
-
-  var parts = process.cwd().split('/')
-
-  if(parts.indexOf('modules') == -1){
-    pathA = path.resolve(process.cwd(),'../')
-  }else{
-    pathA = path.resolve(process.cwd(),'../../../')
-  }
-
   scope = {
-    projectPath: process.cwd(),
-    rootPath: __dirname,
-    AppModules: process.cwd() + '/modules/', /* revisar */
+    AppModules: process.cwd() + '/modules/',
     templates: __dirname + '/templates/',
     jst: __dirname + '/templates/jst/',
-    assets: '/assets/'
+    assets: '/assets/',
+    $: ''
   }
-
 }
 
 Mamba.prototype.newProject = function(obj){
@@ -60,18 +46,10 @@ Mamba.prototype.newProject = function(obj){
     'assets/js/plugins'
   ];
 
-  // fix error handling
+  // add error handling
 
   tree.forEach(function(e){
     fs.mkdirSync(e)
-    // fs.exists(e, function(exists){
-    //   if(!exists){
-    //     fs.mkdirSync(e)
-    //   }else{
-    //     console.log('sorry, in: ' + process.cwd() + ' there is already an installation of one AngularJS App');
-    //     process.exit();
-    //   }
-    // })
   });
 
   var targets = {
@@ -125,7 +103,7 @@ Mamba.prototype.newProject = function(obj){
       console.log(m);
     })
     .catch(function(err){
-      console.log(err);
+      console.log('error promise', err);
     })
   })
   .catch(function(err){
@@ -163,27 +141,25 @@ Mamba.prototype.cloneModule = function(e){
       var installDir = process.cwd() + '/assets'
     }
 
-    // var module = scope.AppModules + e.name
-
     fs.exists(module, function(exists){
 
       if(!exists){
         console.log('Downloading: ', e.name);
-
-        process.chdir(installDir)
+        try{
+          process.chdir(installDir)
+        }catch(e){
+          reject('Wrong path for install modles or assets ', process.cwd());
+        }
 
         spawn('git', ['clone', '--depth', 1, '-b' , e.branch , e.repository, e.name])
         .then(function(){
-
           console.log('Installing module: ', e.name);
           resolve({ name: e.name, path: scope.AppModules + e.name })
-
         })
         .fail(function(err){
-          reject(err)
+          console.log('spawn fail', err);
+          reject('fail', err)
         })
-      }else{
-        reject('Module ' + e.name + ' is already installed')
       }
     })
   })
@@ -192,18 +168,18 @@ Mamba.prototype.cloneModule = function(e){
 Mamba.prototype.installModules = function(){
 
   try{
-    scope.dependencies = JSON.parse(fs.readFileSync(pathA + '/dependencies.json', 'utf8')).modules
+    scope.dependencies = JSON.parse(fs.readFileSync(Mamba.prototype.getPaths().appPath + '/dependencies.json', 'utf8')).modules
   }catch(e){
+    console.log(e);
     console.log('cannot read the dependencies.json package');
     console.log('are you sure you in the app folder?');
     process.exit()
   }
 
   var promises = [];
+  var registerFiles = [];
 
-  var path = require('path');
-
-  for(var i=0; i<scope.dependencies.length; i++){
+  for(var i = 0; i < scope.dependencies.length; i++){
 
     var module = scope.AppModules + scope.dependencies[i].name
 
@@ -214,41 +190,37 @@ Mamba.prototype.installModules = function(){
     }
   }
 
-  Promise.all(promises)
-  .then(function(modules){
+  if(promises.length > 0){
+    Promise.all(promises)
+    .then(function(modules){
 
-    function dependencies(dirname, moduleName) {
+      function dependencies(dirname, moduleName) {
+        var walker = walk.walk(dirname, { FIFO: true });
+        walker.on('file', function (root, stat, next) {
 
-      var walker = walk.walk(dirname, { FIFO: true });
+          if (modules.length) {
+            var ext = path.extname(stat.name);
+            if(allowedFiles.indexOf(ext) > -1){
+              var container = root.substr(root.lastIndexOf('/') + 1)
+              var folder;
 
-      walker.on('file', function (root, stat, next) {
+              (moduleName == container)? folder = container : folder = moduleName + '/' + container
 
-        if (modules.length) {
-
-          var ext = path.extname(stat.name);
-
-          if(allowedFiles.indexOf(ext) > -1){
-
-            var container = root.substr(root.lastIndexOf('/') + 1)
-            var folder
-
-            (moduleName == container)? folder = container : folder = moduleName + '/' + container
-
-            Mamba.prototype.register({moduleName: moduleName, folder: folder, name: stat.name})
+              Mamba.prototype.register({moduleName: moduleName, folder: folder, name: stat.name});
+            }
+            next();
           }
-          next();
-        }
-      });
-    }
+        });
+      }
 
-    modules.forEach(function(e){
-      dependencies(e.path, e.name)
+      modules.forEach(function(e){
+        dependencies(e.path, e.name)
+      })
     })
-
-  })
-  .catch(function(err){
-    console.log(err);
-  })
+    .catch(function(err){
+      console.log('catch', err);
+    })
+  }
 }
 
 Mamba.prototype.compile = function(obj){
@@ -258,12 +230,11 @@ Mamba.prototype.compile = function(obj){
 
   switch(obj.type){
     case 'controller':
-      // var path = 'app/controller/' + obj.name + 'Controller.js'
-      var path = scope.projectPath + '/controller/' + obj.name + 'Controller.js'
+      var path = process.cwd() + '/controller/' + obj.name + 'Controller.js'
     break;
 
     case 'factory':
-      var path = scope.projectPath + '/factory/' + obj.name + 'Factory.js'
+      var path = process.cwd() + '/factory/' + obj.name + 'Factory.js'
     break;
   }
 
@@ -271,20 +242,26 @@ Mamba.prototype.compile = function(obj){
     if(!err){
       Mamba.prototype.register({moduleName: obj.module, folder: path, name: obj.name + 'Controller.js'})
     }else{
-      console.log(err);
+      console.log('ouco', err);
     }
   })
 }
 
 Mamba.prototype.register = function(obj){
+  console.log('Registring ', path.relative(process.cwd(), obj.folder) + '/' + obj.name);
 
-  console.log('Registring ', obj.name);
-  // console.log('');
-  // console.log(obj);
-  // console.log('');
-  // console.log(process.cwd());
-  console.log('');
-  console.log('RElative: ', path.relative(process.cwd(), obj.folder));
+  var paths = Mamba.prototype.getPaths(obj);
+
+  scope.$ = cheerio.load(fs.readFileSync(paths.appPath + '/index.html', 'utf8'));
+  scope.$('body').append('\t <!-- Module ' + obj.moduleName + ' --> \n');
+  scope.$('body').append('\t <script type="text/javascript" src="' + paths.registeredFile + '"></script> \n')
+
+  fs.writeFileSync(paths.appPath + '/index.html', scope.$.html());
+}
+
+Mamba.prototype.getPaths = function(obj){
+
+  obj == undefined? obj = { name: '', folder: '/' }: obj = obj;
 
   var split = process.cwd().split('/');
   var paths = [];
@@ -298,40 +275,25 @@ Mamba.prototype.register = function(obj){
   var len = paths.length;
   var pos = paths.indexOf('modules') + 1;
 
-  // console.log(len, pos, paths);
-
-  // pos < length estoy en un modulo
-  // pos = 0 estoy fuera de modules y creando un controller para app
-  // pos = len estoy instalando un modulo desde app
-
-  var registeredFile;
-
-  if(pos < len){
-    var pathIndexHtml = path.resolve(path.dirname(process.cwd()), '..', '..');
-    registeredFile = 'module/' + path.relative(process.cwd(), obj.folder);
+  if(pos < len && pos != 0){
+    var appPath = path.resolve(path.dirname(process.cwd()), '..', '..');
+    var registeredFile = 'modules/' + paths[len-1] + '/' + path.relative(process.cwd(), obj.folder);
   }
 
   if (pos == len) {
-    var pathIndexHtml = path.resolve(path.dirname(process.cwd()), '..');
+    var appPath = path.resolve(path.dirname(process.cwd()), '..');
+    var registeredFile = 'modules/' + path.relative(process.cwd(), obj.folder) + '/' + obj.name;
   }
 
   if(pos == 0){
-    var pathIndexHtml = path.resolve(path.dirname(process.cwd()));
+    var appPath = path.resolve(path.dirname(process.cwd()));
+    var registeredFile = path.relative(process.cwd(), obj.folder);
   }
 
-  // console.log('PATH', pathIndexHtml);
-
-  var $ = cheerio.load(fs.readFileSync(pathIndexHtml + '/index.html', 'utf8'));
-
-  $('body').append('\t <!-- Module ' + obj.moduleName + ' --> \n');
-  $('body').append('\t <script type="text/javascript" src="' + registeredFile + '/' + obj.name + '"></script> \n')
-
-  process.chdir(scope.projectPath)
-
-  fs.writeFile(path.resolve(scope.projectPath,'../index.html'), $.html(), function(err){
-    if(err) console.log('error', err);
-  })
-
+  return {
+    appPath: appPath,
+    registeredFile: registeredFile
+  }
 }
 
 module.exports = Mamba;
