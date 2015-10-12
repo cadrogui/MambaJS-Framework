@@ -9,19 +9,6 @@ var program = require('commander'),
 program
   .command('test')
   .action(function(){
-    // var cache = {'/etc':'/private/etc'};
-
-    // fs.realpath(process.cwd(), '/app/modules', function (err, resolvedPath) {
-    //   if (err) throw err;
-    //   console.log(resolvedPath);
-    // });
-
-    // console.log('modulos', path.resolve(process.cwd(),'modules'));
-    // console.log('controladores', path.resolve(process.cwd(),'controller'));
-
-    // console.log(path.relative(process.cwd(), 'app/modules/Demo'));
-
-    // console.log(fs.readFileSync(path.join(process.cwd(), '../templates') + '/my-template.html', 'utf8'));
 
     scope = {
       projectPath: process.cwd(),
@@ -32,10 +19,6 @@ program
       assets: '/assets/',
     }
 
-    // funcrion para refistrar componentes dentro de un modulo
-
-    // crear un asistente para definir variables globales como el APP NAME en un json file
-
     function opp(){
       if(process.cwd().indexOf('modules') != -1){
         return 'estoy en modules' + path.resolve(path.dirname(process.cwd()), '..', '..')
@@ -44,8 +27,6 @@ program
       }
     }
     console.log(opp());
-
-    // console.log(scope);
   })
 
 program

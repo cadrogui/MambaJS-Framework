@@ -219,7 +219,7 @@ Mamba.prototype.installModules = function(){
 
     function dependencies(dirname, moduleName) {
 
-      var walker = walk.walk(dirname, { FIFO: true});
+      var walker = walk.walk(dirname, { FIFO: true });
 
       walker.on('file', function (root, stat, next) {
 
@@ -277,16 +277,54 @@ Mamba.prototype.compile = function(obj){
 }
 
 Mamba.prototype.register = function(obj){
+
   console.log('Registring ', obj.name);
+  // console.log('');
+  // console.log(obj);
+  // console.log('');
+  // console.log(process.cwd());
+  console.log('');
+  console.log('RElative: ', path.relative(process.cwd(), obj.folder));
 
-  // fix when create a controller from inside a module app/modules/Module, pathA is wrong
+  var split = process.cwd().split('/');
+  var paths = [];
 
-  var $ = cheerio.load(fs.readFileSync(pathA + '/index.html', 'utf8'))
+  split.forEach(function(e){
+    if(e != ''){
+      paths.push(e);
+    }
+  })
 
-  console.log('pppp', obj);
+  var len = paths.length;
+  var pos = paths.indexOf('modules') + 1;
+
+  // console.log(len, pos, paths);
+
+  // pos < length estoy en un modulo
+  // pos = 0 estoy fuera de modules y creando un controller para app
+  // pos = len estoy instalando un modulo desde app
+
+  var registeredFile;
+
+  if(pos < len){
+    var pathIndexHtml = path.resolve(path.dirname(process.cwd()), '..', '..');
+    registeredFile = 'module/' + path.relative(process.cwd(), obj.folder);
+  }
+
+  if (pos == len) {
+    var pathIndexHtml = path.resolve(path.dirname(process.cwd()), '..');
+  }
+
+  if(pos == 0){
+    var pathIndexHtml = path.resolve(path.dirname(process.cwd()));
+  }
+
+  // console.log('PATH', pathIndexHtml);
+
+  var $ = cheerio.load(fs.readFileSync(pathIndexHtml + '/index.html', 'utf8'));
 
   $('body').append('\t <!-- Module ' + obj.moduleName + ' --> \n');
-  $('body').append('\t <script type="text/javascript" src="app/modules/' + obj.folder + '/' + obj.name + '"></script> \n')
+  $('body').append('\t <script type="text/javascript" src="' + registeredFile + '/' + obj.name + '"></script> \n')
 
   process.chdir(scope.projectPath)
 
