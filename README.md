@@ -40,7 +40,7 @@ MyFactory.method().then(function(data){
 })
 ````
 
-### Use One-Way binding data
+### Use One-Time Binding Syntax
 
 Since AngularJS 1.3, you can give some extra preformance to your app, using one time binding syntax, but why use this?, because the $digest cycle is a loop through all binding wich checks for changes in the data and re render any value changes as when the app scale the binding counts increase and performance of the app gets down, becasue the $digest loop size increase, to optimize this use the one time binding syntax, and in the DOM not all things must be watched.
 
