@@ -14,7 +14,11 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node mamba",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mamba": "./mamba"
   },
   "repository": {
     "type": "git",
