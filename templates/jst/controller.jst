@@ -4,8 +4,13 @@
  * @description :: AngularJS controller as Immediatelly Invoked Function Expression (IIFE)
  *                 An IIFE removes variables from the global scope. This helps prevent variables
  *                 and function declarations from living longer than expected in the global scope,
- *                 which also helps avoid variable collisions
- * @help        :: See http://
+ *                 which also helps avoid variable collisions.
+ *
+ *                 Mamba JS use angular.extend for bind data or functions to views instead of vm, this is
+ *                 because using extend give more clean and Object oriented code, so you can keep things clear
+ *                 about your private and public variables or methods.
+ *
+ * @help        :: See https://github.com/cadrogui/MambaJS-Framework#readme
  *
  */
 
@@ -24,11 +29,26 @@
       Bindable Members Up Top
       Placing bindable members at the top makes it easy to read and helps you instantly identify which
       members of the controller can be bound and used in the View
+
+      Public methods and variables are in angular.extend, and are exposed to views when
+      controller as syntax is used, if you want to get data binding you must use the
+      angular.extend again with the variable.
+
+      ex:
+        MyFactory.method().then(function(data){
+          angular.extend(vm, {
+            viewVar: data
+          })
+        })
     */
 
-      var vd = this
-      <% methods.forEach(function(name) { %>vd.<%- name %> = <%- name %>
-      <% }); %>
+      var vm = this
+
+      // Here are all public vars or methods.
+
+      angular.extend(vm, {
+      <% methods.forEach(function(name) { %>  <%- name %>: <%- name %>,
+      <% }); %> });
 
       <% methods.forEach(function(name) { %>
       function <%- name %>(){

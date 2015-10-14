@@ -277,17 +277,17 @@ Mamba.prototype.getPaths = function(obj){
 
   if(pos < len && pos != 0){
     var appPath = path.resolve(path.dirname(process.cwd()), '..', '..');
-    var registeredFile = 'modules/' + paths[len-1] + '/' + path.relative(process.cwd(), obj.folder);
+    var registeredFile = 'app/modules/' + paths[len-1] + '/' + path.relative(process.cwd(), obj.folder);
   }
 
   if (pos == len) {
     var appPath = path.resolve(path.dirname(process.cwd()), '..');
-    var registeredFile = 'modules/' + path.relative(process.cwd(), obj.folder) + '/' + obj.name;
+    var registeredFile = 'app/modules/' + path.relative(process.cwd(), obj.folder) + '/' + obj.name;
   }
 
   if(pos == 0){
     var appPath = path.resolve(path.dirname(process.cwd()));
-    var registeredFile = path.relative(process.cwd(), obj.folder);
+    var registeredFile = 'app/' + path.relative(process.cwd(), obj.folder);
   }
 
   return {

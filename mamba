@@ -39,7 +39,7 @@ var program = require('commander'),
 
       var module = options.module
       var name = options.name
-      var crud = ['create','list','update','delete']
+      var crud = ['Create','List','Update','Delete']
 
       if(options.crud){
         var methods = crud

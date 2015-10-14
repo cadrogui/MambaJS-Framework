@@ -11,8 +11,11 @@
       console.log('load app.controller');
 
       var vm = this
-      vm.menu = Menu.getItems();
-      vm.currentUser = AuthService.getCurrentUser()
+
+      angular.extend(vm, {
+        menu: Menu.getItems(),
+        currentUser: AuthService.getCurrentUser()
+      });
 
       notify(
         { message: 'Hello - This is a alert from App Controller, at Angular.JS way',
