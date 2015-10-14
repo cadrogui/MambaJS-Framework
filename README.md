@@ -78,7 +78,13 @@ more examples:
 
 In this way youre data is unbinded, and you performance are increased.
 
-### Setting your environment
+### Install using npm
+
+````
+npm i -g mamba-js-framework
+````
+
+### Setting your environment (Dev)
 
 Add to your .bashrc file:
 ````
