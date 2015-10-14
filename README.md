@@ -3,6 +3,7 @@
 ![](http://legalintelligence.cl/logo-mamba.png)
 
 ### Rapid Web Development With AngularJS.
+
 The main goal of Mamba is help to develop AngularJS Apps, as fast as you can, in this way, i propose an structure for build Angular Apps, based on a few documents that i read on the net, the most important ducument is one about best design practices, maintainable and scable code from [John Papa - Angular Style Guide](https://github.com/johnpapa/angular-styleguide), is on this guide where resides the main concepts for build greats and clean code for your apps.
 
 The pattern design used in mamba is domain pattern.
@@ -14,6 +15,7 @@ Mamba has built with several tools and concepts for help to create a fast way to
 * Templates, Mamba has come with a simple provider that can manage several themes
 
 ### The declaration of principles
+
 * Clean Code
 * Single Responsability
 * Angular Components as Inmmediatelly Invoked Function Expression
@@ -25,7 +27,59 @@ Mamba has built with several tools and concepts for help to create a fast way to
 * Folders-by-Type Structure
 * Startup Logic
 
+### No use of vm for bind data to views.
+
+Mamba JS use ***angular.extend*** for bind data or methods to views, because this way is more cleaner and Object-Driven way, so you can keep things clear about your ***private*** and ***public*** variables or methods,
+if you want yo bind data you must do like this:
+
+````
+MyFactory.method().then(function(data){
+  angular.extend(vm, {
+    viewVar: data
+  })
+})
+````
+
+### Use One-Way binding data
+
+Since AngularJS 1.3, you can give some extra preformance to your app, using one time binding syntax, but why use this?, because the $digest cycle is a loop through all binding wich checks for changes in the data and re render any value changes as when the app scale the binding counts increase and performance of the app gets down, becasue the $digest loop size increase, to optimize this use the one time binding syntax, and in the DOM not all things must be watched.
+
+Commonly in the views the data is represented like this:
+
+````
+<p>
+	{{ vm.hello }}
+</p>
+````
+
+the new syntax add ***::*** in front of any values, wich declares we want to one time binding
+
+````
+<p>
+	{{ ::vm.hello }}
+</p>
+````
+
+more examples:
+
+````
+<div ng-if="::vm.user.isLogged"></div>
+````
+
+````
+<div ng-class="::{ isLogged: vm.user.isLogged }"></div>
+````
+
+````
+<ul>
+  <li ng-repeat="item in ::vm.items"></li>
+</ul>
+````
+
+In this way youre data is unbinded, and you performance are increased.
+
 ### Setting your environment
+
 Add to your .bashrc file:
 ````
 alias mamba=/path/to/mamba/cloned/repo
@@ -107,6 +161,7 @@ AppFactory.getPostsByUser(obj).then(function(promise){
 ````
 
 ### Cache
+
 Mamba has built in with a cache factory for cached your request and save bandwidth and give more speed to your app.
 
 For use the factory you must inject the 'CachedData' on your controller.
@@ -143,7 +198,9 @@ Mamba came with a complete auth service to handle you auth process, the methods 
 * isAuthenticated
 
 ### Restrict Acces to a UI-Router State
-For handle restricted areas in your app, you must add this to the desired state
+
+For handle restricted areas in your app, you must add this to the desired state.
+
 ````
 data: { requireLogin: true },
 ````
@@ -151,6 +208,8 @@ data: { requireLogin: true },
 The app on the event $stateChangeStart, will verify if the state has the requiredLogin flag to true, if is true the app will verify if the AuthService.isAuthenticated() method return true if both conditions are true you must restricted area if AuthService.isAuthenticated() method is false will redirect to login state.
 
 ### Login Controller
+
+In process
 
 ### HTTP Interceptor
 
@@ -178,7 +237,12 @@ If you want to create a external link you must add this:
     })
 ````
 
-All other thing are setup to work prepertly.
+All other thing are setup to work propertly.
 
 ### Template Provider
+
+In process
+
 ### Building templates
+
+In process
