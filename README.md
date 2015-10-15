@@ -2,7 +2,7 @@
 
 ![](http://legalintelligence.cl/logo-mamba.png)
 
-### Rapid Web Development With AngularJS.
+## Rapid Web Development With AngularJS.
 
 The main goal of Mamba is help to develop AngularJS Apps, as fast as you can, in this way, i propose an structure for build Angular Apps, based on a few documents that i read on the net, the most important ducument is one about best design practices, maintainable and scable code from [John Papa - Angular Style Guide](https://github.com/johnpapa/angular-styleguide), is on this guide where resides the main concepts for build greats and clean code for your apps.
 
@@ -14,7 +14,7 @@ Mamba has built with several tools and concepts for help to create a fast way to
 * Modularity, manage app modules from Git repositories, when you install a module the menu of this module automatically inject into the main app.
 * Templates, Mamba has come with a simple provider that can manage several themes
 
-### The declaration of principles
+## The declaration of principles
 
 * Clean Code
 * Single Responsability
@@ -24,10 +24,9 @@ Mamba has built with several tools and concepts for help to create a fast way to
 * Bindable Members of components
 * Work with promises
 * Exception Catchers
-* Folders-by-Type Structure
 * Startup Logic
 
-### No use of vm for bind data to views.
+## No use of vm for bind data to views.
 
 Mamba JS use ***angular.extend*** for bind data or methods to views, because this way is more cleaner and Object-Driven way, so you can keep things clear about your ***private*** and ***public*** variables or methods,
 if you want yo bind data you must do like this:
@@ -40,9 +39,9 @@ MyFactory.method().then(function(data){
 })
 ````
 
-### Use One-Time Binding Syntax
+## Use One-Time Binding Syntax
 
-Since AngularJS 1.3, you can give some extra preformance to your app, using one time binding syntax, but why use this?, because the $digest cycle is a loop through all binding wich checks for changes in the data and re render any value changes as when the app scale the binding counts increase and performance of the app gets down, becasue the $digest loop size increase, to optimize this use the one time binding syntax, and in the DOM not all things must be watched.
+Since AngularJS 1.3, you can give some extra preformance to your app, using one time binding syntax, but why use this?, because the ***$digest cycle*** is a loop through all binding wich checks for changes in the data and re render any value changes as when the app scale the binding counts increase and performance of the app gets down, becasue the $digest loop size increase, to optimize this use the one time binding syntax, and ***in the DOM not all things must be watched.***
 
 Commonly in the views the data is represented like this:
 
@@ -78,13 +77,13 @@ more examples:
 
 In this way youre data is unbinded, and you performance are increased.
 
-### Install using npm
+## Install using npm
 
 ````
 npm i -g mamba-js-framework
 ````
 
-### Setting your environment (Dev)
+## Setting your environment (Dev)
 
 Add to your .bashrc file:
 ````
@@ -97,7 +96,7 @@ To expose all scripts in the shell directory add mamba path to your system path
 export PATH=/path/to/mamba/cloned/repo:$PATH
 ````
 
-### Creating a new AngularJS project
+## Creating a new AngularJS project
 
 ````
 mamba new
@@ -115,19 +114,23 @@ Heres is the directory tree:
     * templates
 * assets
 
-### Creating a new Controller
+## Creating a new Controller
 
 ````
-mamba generate controller -n newController -D
+mamba generate controller -n newController -m App -D
 ````
 
-This will generate a new blank controller if you add the -D option the controller will be created with the default actions (CRUD)
+This will generate a new blank controller if you add the -D option the controller will be created with the default actions (CRUD), if you want to create custom actions, use comma separated values.
 
-### Installing modules
+````
+mamba generate controller -n newController -m App -a foo,bar
+````
 
-Mamba can install modules from remote Git repositories, you must configure the dependencies.json file:
+## Installing modules
 
-The module must have the same directory tree listed above, cause mamba gets a module as micro app (Domain Design Pattern)
+Mamba can install modules from remote ***Git repositories***, you must configure the ***dependencies.json*** file:
+
+The module must have the same directory tree listed above, cause mamba gets a module as micro app ***(Domain Design Pattern)***
 
 ````
 {
@@ -142,13 +145,14 @@ The module must have the same directory tree listed above, cause mamba gets a mo
 }
 ````
 for install the modules listed in your dependencies.json file, just type:
+
 ````
 mamba install -m
 ````
 
-### Url Interpolator
+## Url Interpolator
 
-Mamba has built in with an url interpolator for develop a clean and easy to read code, you can read the gist [here](https://gist.github.com/cadrogui/286669e5fb17faeae0fb).
+Mamba has built in with an ***URL Interpolator*** for develop a clean and easy to read code, you can read the gist [here](https://gist.github.com/cadrogui/286669e5fb17faeae0fb).
 
 For use the Interpolator you must provide an array with an object and the object properties are the interpolated labels.
 
@@ -166,30 +170,41 @@ AppFactory.getPostsByUser(obj).then(function(promise){
 });
 ````
 
-### Cache
+## Cache
 
 Mamba has built in with a cache factory for cached your request and save bandwidth and give more speed to your app.
 
-For use the factory you must inject the 'CachedData' on your controller.
+For use the factory you must inject the ***CachedData*** on your controller.
+
+````
+MyController.$inject = ['CachedData']
+````
 
 Add data to cache:
+
 ````
 CachedData.put('key', values)
 ````
+
 Read data fom cache:
+
 ````
 CachedData.get('key')
 ````
+
 Remove data from cache:
+
 ````
 CachedData.remove('key')
 ````
+
 Clear entire cache:
+
 ````
 CachedData.removeAll();
 ````
 
-### Auth Service
+## Auth Service
 
 Mamba came with a complete auth service to handle you auth process, the methods are:
 
@@ -203,7 +218,7 @@ Mamba came with a complete auth service to handle you auth process, the methods 
 * destroyUser
 * isAuthenticated
 
-### Restrict Acces to a UI-Router State
+## Restrict Acces to a UI-Router State
 
 For handle restricted areas in your app, you must add this to the desired state.
 
@@ -211,19 +226,19 @@ For handle restricted areas in your app, you must add this to the desired state.
 data: { requireLogin: true },
 ````
 
-The app on the event $stateChangeStart, will verify if the state has the requiredLogin flag to true, if is true the app will verify if the AuthService.isAuthenticated() method return true if both conditions are true you must restricted area if AuthService.isAuthenticated() method is false will redirect to login state.
+The app on the event ***$stateChangeStart***, will verify if the state has the requiredLogin flag to true, if is true the app will verify if the ***AuthService.isAuthenticated()*** method return true if both conditions are true you must restricted area if ***AuthService.isAuthenticated()*** method is false will redirect to login state.
 
 ### Login Controller
 
 In process
 
-### HTTP Interceptor
+## HTTP Interceptor
 
-Mamba suggest to handle the request by http status code, in this way you can set some generic resposnses string for those status code.
+Mamba suggest to handle the request by HTTP Status Codes, in this way you can set some generic resposnses string for those status codes, and you not implement error handling in ***$stateChangeError***, if you want catch errors in the HTTP interceptor you must create a ***$rootScope.$broadcast('customErrorHandling')*** and in the ***app.run.js*** catch this broadcasted message with ***$rootScope.$on('customErrorHandling', fn())***.
 
-### Menu Provider
+## Menu Provider
 
-Mambas has built with a menu provider for handle dinamically the menu item injection in the template, you must add the items in the route.js file:
+Mambas has built with a menu provider for ***handle dinamically the menu item injection*** in the template, you must add the items in the route.js file:
 
 ````
   MenuProvider.add({
@@ -245,10 +260,10 @@ If you want to create a external link you must add this:
 
 All other thing are setup to work propertly.
 
-### Template Provider
+## Template Provider
 
 In process
 
-### Building templates
+## Building templates
 
 In process
