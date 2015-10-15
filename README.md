@@ -228,7 +228,7 @@ data: { requireLogin: true },
 
 The app on the event ***$stateChangeStart***, will verify if the state has the requiredLogin flag to true, if is true the app will verify if the ***AuthService.isAuthenticated()*** method return true if both conditions are true you must restricted area if ***AuthService.isAuthenticated()*** method is false will redirect to login state.
 
-### Login Controller
+## Login Controller
 
 In process
 
