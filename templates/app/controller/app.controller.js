@@ -5,9 +5,9 @@
         .module('App')
         .controller('AppController', AppController);
 
-    AppController.$inject = ['Menu', '$timeout', 'notify', 'AuthService']
+    AppController.$inject = ['Menu', '$timeout', 'notify', 'AuthService', '_']
 
-    function AppController(Menu, $timeout, notify, AuthService) {
+    function AppController(Menu, $timeout, notify, AuthService, _) {
       console.log('load app.controller');
 
       var vm = this

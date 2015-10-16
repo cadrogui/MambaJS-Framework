@@ -150,6 +150,24 @@ for install the modules listed in your dependencies.json file, just type:
 mamba install -m
 ````
 
+## Underscore.js as Factory
+Mamba has built with a custom module for inject the great ***functional pattern library underscore.js***, following the standard AngularJS modules injection dependencies.
+
+````
+MyController.$inject = ['_'];
+
+function MyController(_){
+	var myArray = [
+		'foo',
+		'bar'
+	];
+	
+	_.map(myArray, function(item){
+		console.log(item);
+	})
+}
+````
+
 ## Url Interpolator
 
 Mamba has built in with an ***URL Interpolator*** for develop a clean and easy to read code, you can read the gist [here](https://gist.github.com/cadrogui/286669e5fb17faeae0fb).
