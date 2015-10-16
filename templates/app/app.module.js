@@ -1,9 +1,5 @@
 angular
-  .module('App', ['ui.router',
-                  'oc.lazyLoad',
-                  'cgNotify',
-                  'MambaJSInterceptorMessages',
-                  'MambaJSUnderscore'])
+  .module('App', ['ui.router', 'oc.lazyLoad', 'cgNotify', 'MambaJSInterceptorMessages'])
   .config(AppConfig)
   .constant('APP_CONSTANTS', {
     URL: 'http://URI_REST/'

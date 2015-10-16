@@ -35,12 +35,6 @@
       "repository": "https://github.com/cgross/angular-notify.git",
       "branch": "master",
       "type": "asset"
-    },
-    {
-      "name": "underscore",
-      "repository": "https://github.com/components/underscore.git",
-      "branch": "master",
-      "type": "asset"
     }
   ]
 }

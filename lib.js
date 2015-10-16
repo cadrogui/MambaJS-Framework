@@ -68,7 +68,6 @@ Mamba.prototype.newProject = function(obj){
     'app/services/interceptor_codes_messages.js': { copy: 'app/services/interceptor_codes_messages.js'},
     'app/factory/auth_service.js': { copy: 'app/factory/auth_service.js'},
     'app/factory/cache.js': { copy: 'app/factory/cache.js'},
-    'app/factory/underscore.js': { copy: 'app/factory/underscore.js'},
     'app/templates/default/app.default.html': { copy: 'app/templates/default/app.default.html'},
     'app/templates/default/descriptions.html': { copy: 'app/templates/default/descriptions.html'},
     'app/templates/default/navbar.html': { copy: 'app/templates/default/navbar.html'},

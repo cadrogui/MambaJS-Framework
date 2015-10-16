@@ -1,6 +1,6 @@
 {
   "name": "mamba-js-framework",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Mamba JS Framework is a web framework to make a rapid development of web front ends based on AngularJS.",
   "main": "mamba",
   "dependencies": {
