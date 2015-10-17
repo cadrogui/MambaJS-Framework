@@ -26,6 +26,12 @@ Mamba has built with several tools and concepts for help to create a fast way to
 * Exception Catchers
 * Startup Logic
 
+## Install using npm
+
+````
+npm i -g mamba-js-framework
+````
+
 ## No use of vm for bind data to views.
 
 Mamba JS use ***angular.extend*** for bind data or methods to views, because this way is more cleaner and Object-Driven way, so you can keep things clear about your ***private*** and ***public*** variables or methods,
@@ -77,24 +83,6 @@ more examples:
 
 In this way youre data is unbinded, and you performance are increased.
 
-## Install using npm
-
-````
-npm i -g mamba-js-framework
-````
-
-## Setting your environment (Dev)
-
-Add to your .bashrc file:
-````
-alias mamba=/path/to/mamba/cloned/repo
-````
-This file is in ~/.bashrc (home directory)
-
-To expose all scripts in the shell directory add mamba path to your system path
-````
-export PATH=/path/to/mamba/cloned/repo:$PATH
-````
 
 ## Creating a new AngularJS project
 
@@ -172,7 +160,7 @@ function MyController(_){
 
 Mamba has built in with an ***URL Interpolator*** for develop a clean and easy to read code, you can read the gist [here](https://gist.github.com/cadrogui/286669e5fb17faeae0fb).
 
-For use the Interpolator you must provide an array with an object and the object properties are the interpolated labels.
+For use the Interpolator you must provide an array with an object and the object properties are the interpolated labels. 	
 
 If you want use the interpolator, you must add the label to your url in the factory method like this:
 
@@ -285,3 +273,33 @@ In process
 ## Building templates
 
 In process
+
+## Angular-Notify
+Mamba by default goes with this module for present alerts in your app, use like this:
+
+````
+AppController.$inject = ['notify']
+
+notify(
+        { message: 'Hello - This is a alert from App Controller, at Angular.JS way',
+          templateUrl: 'app/templates/common/notify.html',
+          duration: '4500',
+          position: 'center'
+        }
+      );
+````
+more info of this service: [here](https://github.com/cgross/angular-notify)
+
+
+## Setting your environment (Dev)
+
+Add to your .bashrc file:
+````
+alias mamba=/path/to/mamba/cloned/repo
+````
+This file is in ~/.bashrc (home directory)
+
+To expose all scripts in the shell directory add mamba path to your system path
+````
+export PATH=/path/to/mamba/cloned/repo:$PATH
+````
