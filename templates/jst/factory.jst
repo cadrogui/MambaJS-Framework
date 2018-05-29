@@ -28,7 +28,7 @@
       */
 
       var service = {
-        <% methods.forEach(function(name) { %> <%- name %>: <%- name %>
+        <% methods.forEach(function(name) { %> <%- name %>: <%- name %>,
         <% }); %>
       }
 
@@ -52,9 +52,7 @@
         });
 
         $q.all(promises).then(function(data){
-          deferred.resolve({
-            "<%- name %>": data
-          })
+          deferred.resolve(data[0].data)
         })
 
         return deferred.promise;

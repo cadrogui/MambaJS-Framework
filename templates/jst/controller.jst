@@ -15,15 +15,17 @@
  */
 
 (function() {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('<%= module %>')
-        .controller('<%= name %>', <%= name %>);
+  angular
+      .module('<%= module %>')
+      .controller('<%= name %>', <%= name %>)
+      .controller('<%= name %>List', <%= name %>List)
 
-    <%= name %>.$inject = ['Menu', '$timeout']
+  <%= name %>.$inject = ['$scope', '$controller', '$rootScope', '_http']
+  <%= name %>List.$inject = ['$scope', '$controller', '$rootScope', '_http']
 
-    function <%= name %>(Menu, $timeout) {
+  function <%= name %>($scope, $controller, $rootScope, _http) {
 
     /*
       Bindable Members Up Top
@@ -42,20 +44,90 @@
         })
     */
 
-      var vm = this
+    var vm = this
 
-      // Here are all public vars or methods.
+    /*
+      for inheritance on dependency injection in parent controller or AppController
+      declare the dependency ex: this.$state = $state, and use here:
+      angular.extend(this, $controller('AppController', { $scope, $scope }))
+    */
 
-      angular.extend(vm, {
-      <% methods.forEach(function(name) { %>  <%- name %>: <%- name %>,
-      <% }); %> });
+    /*
+      in multiple named views update the data un view as
+      this.$state.go(this.$state.current.name, {}, { reload: true })
+    */
 
-      <% methods.forEach(function(name) { %>
-      function <%- name %>(){
-        // ...
-      }
-      <% }); %>
+    // Here are all public vars or methods.
 
+    angular.extend(vm, {
+    <% methods.forEach(function(name) { %>  <%- name %>: <%- name %>,
+    <% }); %> });
+
+    <% methods.forEach(function(name) { %>
+
+    <% if(name == 'Create'){ %>
+
+    function <%- name %>(obj){
+      _http.request({
+        method: 'POST',
+        endpoint: '<%= endpoint %>',
+        data: obj
+      })
+      .then(data => {
+        $rootScope.$broadcast('share-data', data[0])
+      })
+    }
+    <%}else{%>
+    function <%- name %>(){
+      // ...
+    }
+    <%}%>
+    <% }); %>
+  }
+
+  /*
+    <%= name %>List Controller
+  */
+
+  function <%= name %>List($scope, $controller, $rootScope, _http) {
+
+    let vm = this
+
+    _http.request({
+      method: 'GET',
+      endpoint: '<%= endpoint %>/list',
+    })
+    .then(data => {
+      $scope.$broadcast('populate', data)
+    })
+
+    $scope.$on('share-data', function(e,d){
+      $scope.$broadcast('populateNewData', d)
+    })
+
+    angular.extend(vm, {
+      update: update,
+      eliminar: eliminar
+    })
+
+    function eliminar(id){
+      _http.request({
+        method: 'DELETE',
+        endpoint: '<%= endpoint %>',
+        params: { id: id }
+      })
+      .then(data => {
+        $scope.$broadcast('deleteElement', id)
+      })
+    }
+
+    function update(obj){
+      _http.request({
+        method: 'PUT',
+        endpoint: '<%= endpoint %>',
+        data: obj
+      })
+    }
   }
 
 })();

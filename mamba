@@ -28,29 +28,52 @@ var program = require('commander'),
     })
 
   program
+    .command('tree [tree]')
+    .description('Generate a new tree for a module template')
+    .option("-n, --name [name]", "Name for the Module")
+    .action(function(env, options){
+      console.log('creating tree module template', options.name);
+
+      if(options.name){
+        mamba.cretateModuleTree(options.name)
+      }else{
+        console.log('you must pass the name');
+      }
+    })
+
+  program
     .command('generate [env]')
-    .description('Create AngularJS components <module, controller, factory, directive, service, route> ')
-    .option("-m, --module [module]", "Angular module name")
-    .option("-n, --name [name]", "Component name")
-    .option("-a, --actions [actions]", "Comma sparated list of method to be generated")
-    .option("-D, --crud [crud]", "Generate with default crud actions ")
-    .option("-I, --interpolate [interpolate]", "Generate a factory with interpolated labels ")
+    .description('Create AngularJS components <controller, factory, routes> ')
+    .option("-m, --module [module]", "Angular module name <generic>")
+    .option("-n, --name [name]", "Component name <generic>")
+    .option("-a, --actions [actions]", "Comma sparated list of method to be generated <controller, factory>")
+    .option("-D, --crud [crud]", "Generate with default crud actions <controller, factory>")
+    .option("-I, --interpolate [interpolate]", "Generate a factory with interpolated labels <factory>")
+    .option("-r, --rootAction [rootAction]", "root action for the abstract state <route>")
+    .option("-s, --states [states]", "Comma separated list of states <route>")
+    .option("-c, --controller [controller]", "name of the controller, used as vm <route>")
+    .option("-e, --endpoint [endpoint]", "name of the endpoint of the rest service, for crud operations")
     .action(function(env, options){
 
       var module = options.module
       var name = options.name
+      var endpoint = options.endpoint
       var crud = ['Create','List','Update','Delete']
 
-      if(options.crud){
-        var methods = crud
+      if(env != 'routes'){
+        if(options.crud){
+          var methods = crud
+        }else{
+          var methods = options.actions.split(',')
+        }
       }else{
-        var methods = options.actions.split(',')
+        var states = options.states.split(',')
       }
 
       switch(env){
         case 'controller':
           console.log('creating controller', env);
-          mamba.compile({module: module, name: name, methods: methods, type: 'controller'})
+          mamba.compile({module: module, name: name, methods: methods, endpoint: endpoint, type: 'controller'})
         break;
 
         case 'factory':
@@ -63,16 +86,16 @@ var program = require('commander'),
           }
         break;
 
-        case 'directive':
-          console.log('creating directive not implemented yet');
-        break;
-
-        case 'service':
-          console.log('creating servicenot implemented yet');
-        break;
-
-        case 'route':
-          console.log('creating routenot implemented yet');
+        case 'routes':
+          console.log('creating routes for ' + module);
+          mamba.compile({
+            module: module,
+            name: name,
+            rootAction: options.rootAction,
+            states: states,
+            controller: options.controller,
+            type: 'routes'
+          })
         break;
       }
   });

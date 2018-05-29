@@ -224,6 +224,29 @@ Mamba.prototype.installModules = function(){
   }
 }
 
+Mamba.prototype.cretateModuleTree = function(name){
+
+  if(process.cwd().indexOf('modules') < 0){
+    console.log('Its sems that you are not in the modules folder, cant go on.');
+    console.log(process.cwd());
+    return
+  }
+
+  fs.mkdirSync(name)
+
+  var tree = [
+    name + '/controller',
+    name + '/directive',
+    name + '/factory',
+    name + '/routes',
+    name + '/views'
+  ]
+
+  tree.forEach(function(e){
+    fs.mkdirSync(e)
+  });
+}
+
 Mamba.prototype.compile = function(obj){
 
   var template = fs.readFileSync(scope.jst + obj.type + '.jst', 'utf8')
@@ -237,24 +260,32 @@ Mamba.prototype.compile = function(obj){
     case 'factory':
       var path = process.cwd() + '/factory/' + obj.name + 'Factory.js'
     break;
+
+    case 'routes':
+      var path = process.cwd() + '/routes/' + obj.name + 'Routes.js'
+    break;
   }
 
   fs.writeFile(path, compiled(obj), function(err){
     if(!err){
-      Mamba.prototype.register({moduleName: obj.module, folder: path, name: obj.name + 'Controller.js'})
+      Mamba.prototype.register({
+        moduleName: obj.module,
+        folder: path,
+        name: obj.name
+      })
     }else{
-      console.log('ouco', err);
+      console.log('ouch', err);
     }
   })
 }
 
 Mamba.prototype.register = function(obj){
-  console.log('Registring ', path.relative(process.cwd(), obj.folder) + '/' + obj.name);
+  console.log('Registring ', path.relative(process.cwd(), obj.folder));
 
   var paths = Mamba.prototype.getPaths(obj);
 
   scope.$ = cheerio.load(fs.readFileSync(paths.appPath + '/index.html', 'utf8'));
-  scope.$('body').append('\t <!-- Module ' + obj.moduleName + ' --> \n');
+  scope.$('body').append('\t <!-- Module ' + obj.name + ' --> \n');
   scope.$('body').append('\t <script type="text/javascript" src="' + paths.registeredFile + '"></script> \n')
 
   fs.writeFileSync(paths.appPath + '/index.html', scope.$.html());
@@ -262,7 +293,7 @@ Mamba.prototype.register = function(obj){
 
 Mamba.prototype.getPaths = function(obj){
 
-  obj == undefined? obj = { name: '', folder: '/' }: obj = obj;
+  obj == undefined ? obj = { name: '', folder: '/' } : obj = obj;
 
   var split = process.cwd().split('/');
   var paths = [];

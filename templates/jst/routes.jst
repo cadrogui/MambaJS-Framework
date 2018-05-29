@@ -1,0 +1,88 @@
+/**
+ * MambaJSFramework
+ *
+ * @description :: Factories should have a single responsibility, that is encapsulated by its context.
+ *                 Once a factory begins to exceed that singular purpose, a new factory should be created.
+ *                 Factories are singletons and return an object that contains the members of the service.
+ * @help        :: See http://
+ *
+ */
+
+function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider, MenuProvider) {
+  $urlRouterProvider.otherwise("/login");
+
+  $ocLazyLoadProvider.config({
+      debug: false
+  });
+
+  MenuProvider.register({
+    header: {
+      title: '<%= rootAction %>',
+      icon: 'fa-book'
+    },
+    submenus: [
+    <% states.forEach(function(e){ %>
+      { url: '<%= rootAction %>.<%= e %>',
+        title: '<%= e %>',
+        icon: 'fa-newspaper-o',
+        acl: [ 'God', 'Admin' ]
+      },
+    <% }) %>
+    ]
+  })
+
+  $stateProvider
+    .state('<%= rootAction %>', {
+      abstract: true,
+      url: "/<%= rootAction %>",
+      templateUrl: "app/views/common/content.html",
+      data: { specialClass: 'skin-1' },
+    })
+    <% states.forEach(function(e){ %>
+    .state('<%= rootAction %>.<%= e %>', {
+        url: "/view",
+        data: { pageTitle: 'Inicio', requireLogin: true },
+        views:{
+          '':{
+            templateUrl: "app/modules/<%= controller %>/views/view.html",
+          },
+          'list@<%= rootAction %>.<%= e %>': {
+            templateUrl:'app/modules/<%= controller %>/views/list.html',
+            controller: function($scope, $controller){
+              let vm = this
+
+              angular.extend(this, $controller('<%= controller %>List', { $scope, $scope }))
+
+              $scope.$on('populate', function(e,d){
+                vm.data = d
+              })
+
+              $scope.$on('populateNewData', function(e,d){
+                vm.data.push(d)
+              })
+
+              $scope.$on('deleteElement', function(e,d){
+                let index = vm.data.map(function(e){
+                  return e.id
+                }).indexOf(d)
+
+                vm.data.splice(index, 1)
+              })
+            },
+            controllerAs: 'vm',
+          },
+          'mantenedor@<%= rootAction %>.<%= e %>': {
+            templateUrl:'app/modules/<%= controller %>/views/mantenedor.html',
+            controller: '<%= controller %> as vm'
+          }
+        }
+    })
+    <% }) %>
+}
+
+angular
+.module('<%= module %>')
+.config(config)
+.run(function($rootScope, $state) {
+    $rootScope.$state = $state;
+});
