@@ -8,7 +8,7 @@
     "cheerio": "^0.19.0",
     "child-process-promise": "^1.1.0",
     "commander": "^2.8.1",
-    "lodash": "^3.9.3",
+    "lodash": "^4.17.15",
     "walk": "^2.3.9",
     "bluebird": "^2.9.30"
   },
